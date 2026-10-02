@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mi aplicacion</string>
+    <string name="contador">Count</string>
+    <string name="disminuir">Decrease Count</string>
+    <string name="aumentar">Increase Count</string>
+    <string name="mierda">Shit</string>
+</resources>

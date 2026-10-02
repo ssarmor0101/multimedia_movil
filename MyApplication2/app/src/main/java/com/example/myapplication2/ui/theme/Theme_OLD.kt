@@ -11,6 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import com.example.ui.theme.AppTypography
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -53,8 +54,7 @@ fun MyApplicationTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
-        content = content,
-        shapes = 
+        typography = AppTypography,
+        content = content
     )
 }

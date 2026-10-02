@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,7 +67,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme() {
                 Scaffold(
                     topBar = {
-                        TopAppBar(title = { Text("Scaffold Example") })
+                        TopAppBar(title = { Text("Ejemplo") })
                     },
                     floatingActionButton = {
                         FloatingActionButton(onClick = { /* Acción */ }) {
@@ -73,7 +76,7 @@ class MainActivity : ComponentActivity() {
                     }
                 ) {
                     innerPadding ->
-                        MyApp()
+                        Counter(modifier = Modifier.padding(innerPadding));
                 }
             }
         }
@@ -98,38 +101,41 @@ fun MyScreenContent() {
 }
 
 @Composable
-fun Counter() {
+fun Counter(modifier: Modifier = Modifier) {
     var count by remember { mutableStateOf(0) }
     Column (
-        modifier = Modifier.padding(50.dp).fillMaxHeight().fillMaxWidth(),
+        modifier = modifier.fillMaxHeight().fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column (
-            modifier = Modifier.border(1.dp, Color.Black)
-        ) {
+        Column () {
             Text (
-                text = "Count: $count",
+                text = "${stringResource(R.string.contador)}: $count",
                 fontSize = 25.sp,
-                color = Color.Magenta,
                 fontWeight = FontWeight.ExtraBold,
                 fontStyle = FontStyle.Italic
             )
-            Button(onClick = { count++ }) {
-                Text("Increase Count")
+            Button(
+                shape = MaterialTheme.shapes.small,
+                onClick = { count++ }
+            ) {
+                Text(stringResource(R.string.aumentar))
             }
-            Button(onClick = { count-- }) {
-                Text("Decrease Count")
+            Button(
+                shape = MaterialTheme.shapes.small,
+                onClick = { count-- }
+            ) {
+                Text(stringResource(R.string.disminuir))
             }
-            MyButton { count = 0 }
+            MyButton (stringResource(R.string.mierda)) { count = 0 }
         }
     }
 }
 
 @Composable
-fun MyButton(onClick: () -> Unit) {
+fun MyButton(text: String, onClick: () -> Unit) {
     Button(onClick = onClick) {
-        Text("Shit")
+        Text(text)
     }
 }
 
@@ -143,10 +149,24 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    backgroundColor = 0x00AA2222,
+    name = "Vista previa nocturna",
+    locale = "es"
+)
 @Composable
-fun GreetingPreview() {
-    MyApplicationTheme {
-        Greeting("World")
-    }
+fun MyCounterNight() {
+    Counter()
+}
+
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0x00FFFFFF,
+    name = "Vista previa principal"
+)
+@Composable
+fun MyCounterPreview() {
+    Counter()
 }

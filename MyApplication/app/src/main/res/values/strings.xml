@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Mi aplicacion</string>
+    <string name="contador">Contar</string>
+    <string name="disminuir">Disminuir conteo</string>
+    <string name="aumentar">Aumentar conteo</string>
+    <string name="mierda">Mierda</string>
 </resources>
