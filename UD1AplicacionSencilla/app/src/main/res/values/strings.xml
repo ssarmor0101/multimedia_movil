@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name" translatable="false">UD1 Aplicacion Sencilla</string>
+    <string name="text_not_change">Nadie pulsó el botón aún</string>
+    <string name="text_changed">Alguien pulso el boton</string>
+    <string name="press">Pulsar</string>
+    <string name="reset">Reiniciar</string>
+    <string name="category_adventure">Aventuras</string>
+    <string name="category_metroidvania" translatable="false">Metroidvania</string>
+    <string name="category_platform">Plataformas</string>
+    <string name="category_infiltration">Infiltracion</string>
+    <string name="category_survival">Supervivencia</string>
+    <string name="category_action">Acción</string>
+    <string name="category_rpg" translatable="false">RPG</string>
+    <string name="category_shooter">Disparos</string>
+    <string name="card">Tarjeta</string>
+</resources>

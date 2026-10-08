@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="text_not_change">Nobody pressed the button yet</string>
+    <string name="text_changed">Someone pressed the button</string>
+    <string name="press">Press</string>
+    <string name="reset">Reset</string>
+    <string name="category_adventure">Adventures</string>
+    <string name="category_platform">Platforms</string>
+    <string name="category_infiltration">Infiltration</string>
+    <string name="category_survival">Survival</string>
+    <string name="category_action">Action</string>
+    <string name="category_shooter">Shooter</string>
+    <string name="card">Card</string>
+</resources>
