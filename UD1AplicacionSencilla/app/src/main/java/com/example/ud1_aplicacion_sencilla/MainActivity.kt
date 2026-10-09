@@ -11,7 +11,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.example.ud1_aplicacion_sencilla.ui.AplicacionSencilla
+import com.example.ud1_aplicacion_sencilla.ui.Contenido
 import com.example.ud1_aplicacion_sencilla.ui.theme.UD1AplicacionSencillaTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,16 +34,30 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(
-    name = "Modo claro",
-    showBackground = true,
-    locale = "es"
-)
-@Preview(
-    name = "Modo oscuro",
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
+//@Preview(
+//    name = "Modo claro",
+//    showBackground = true,
+//    locale = "es"
+//)
+//@Preview(
+//    name = "Modo oscuro",
+//    showBackground = true,
+//    uiMode = Configuration.UI_MODE_NIGHT_YES
+//)
+//@Composable
+//fun AplicacionPreview() {
+//    UD1AplicacionSencillaTheme(
+//        dynamicColor = false
+//    ) {
+//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//            AplicacionSencilla(
+//                modifier = Modifier.padding(innerPadding)
+//            );
+//        }
+//    }
+//}
+
+@PreviewLightDark
 @Composable
 fun AplicacionPreview() {
     UD1AplicacionSencillaTheme(
@@ -49,6 +65,23 @@ fun AplicacionPreview() {
     ) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             AplicacionSencilla(
+                modifier = Modifier.padding(innerPadding)
+            );
+        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+fun AplicacionPreviewActive() {
+    UD1AplicacionSencillaTheme(
+        dynamicColor = false
+    ) {
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            Contenido(
+                pulsado = true,
+                onPress = {},
+                onReset = {},
                 modifier = Modifier.padding(innerPadding)
             );
         }

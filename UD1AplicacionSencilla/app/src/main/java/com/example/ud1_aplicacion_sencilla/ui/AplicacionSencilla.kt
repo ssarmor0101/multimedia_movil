@@ -53,7 +53,24 @@ private val videojuegos = listOf(
 );
 
 @Composable
-fun  AplicacionSencilla(modifier: Modifier) {
+fun  AplicacionSencilla(modifier: Modifier = Modifier) {
+    var pulsado by rememberSaveable { mutableStateOf(false) }
+
+    Contenido(
+        pulsado = pulsado,
+        onPress = { pulsado = true },
+        onReset = { pulsado = false },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun Contenido(
+    pulsado: Boolean,
+    onPress: () -> Unit,
+    onReset: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -65,51 +82,49 @@ fun  AplicacionSencilla(modifier: Modifier) {
         ) {
         BuildCarouselListaFija();
         Spacer(modifier = Modifier.height(20.dp))
-        BuildCarousel {
-            videojuegos.forEach { videojuego ->
-                item {
-                    BuildCard(modifier = Modifier.size(250.dp)) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
+        VideogamesCarousel();
+        Spacer(modifier = Modifier.height(10.dp))
+        Buttons(
+            enabled = pulsado,
+            onPress = onPress,
+            onReset = onReset
+        );
+    }
+}
+
+@Composable
+fun VideogamesCarousel() {
+    BuildCarousel {
+        videojuegos.forEach { videojuego ->
+            item {
+                BuildCard(modifier = Modifier.size(250.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            fontSize = 25.sp,
+                            text = videojuego.nombre
+                        );
+                        Row() {
+                            Icon(
+                                imageVector = Icons.Filled.Category,
+                                contentDescription = "Icono"
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                fontSize = 25.sp,
-                                text = videojuego.nombre
+                                fontSize = 15.sp,
+                                text = stringResource(videojuego.categoria)
                             );
-                            Row() {
-                                Icon(
-                                    imageVector = Icons.Filled.Category,
-                                    contentDescription = "Icono"
-                                )
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(
-                                    fontSize = 15.sp,
-                                    text = stringResource(videojuego.categoria)
-                                );
-                            }
                         }
                     }
                 }
             }
         }
-        Spacer(modifier = Modifier.height(10.dp))
-        Pulsadores();
     }
-}
-
-@Composable
-fun Pulsadores() {
-    var activated by rememberSaveable { mutableStateOf(false) }
-
-    Buttons(
-        enabled = activated,
-        onPress = { activated = true },
-        onReset = { activated = false }
-    )
 }
 
 @Composable
