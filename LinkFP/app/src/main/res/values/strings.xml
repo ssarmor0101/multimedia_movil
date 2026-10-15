@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name" translatable="false">LinkFP</string>
+    <string name="hello_world">¡Hola Mundo!</string>
+    <string name="acerca_de">Esta aplicacion es para el Proyecto Intermodular hecho por:</string>
+    <string name="ayuda">Aqui te ayudamos</string>
+    <string name="historia">Esta aplicacion fue hecha para algo</string>
+    <string name="sobre_nosotros">Informacion claramente nuestra</string>
+    <string name="licencia">Licencia</string>
+</resources>
