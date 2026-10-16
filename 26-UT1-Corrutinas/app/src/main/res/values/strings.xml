@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Corrutinas</string>
+    <string name="txt_botón">Iniciar</string>
+    <string name="txt_inicial">¡Hola 2º DAM-T! \nSimula una descarga de un fichero</string>
+    <string name="txt_posterior">El fichero se está descargando</string>
+    <string name="txt_barra1">Barra de progreso 1: </string>
+    <string name="txt_barra2">Barra de progreso 2: </string>
+    <string name="etiqueta_progreso">Cambia el progreso del indicador</string>
+</resources>

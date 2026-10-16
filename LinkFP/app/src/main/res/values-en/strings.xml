@@ -8,4 +8,5 @@
     <string name="historia">This app was made for something</string>
     <string name="sobre_nosotros">Clearly our information</string>
     <string name="licencia">License</string>
+    <string name="button_move_to_view">Button for moving to view %1$d</string>
 </resources>

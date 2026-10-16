@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Coroutines</string>
+    <string name="txt_botón">Start!</string>
+    <string name="txt_inicial">Hi there, 2ºDAM-T!</string>
+    <string name="txt_posterior">Someone hit the button.</string>
+    <string name="txt_barra1">Progress bar 1: </string>
+    <string name="txt_barra2">Progress bar 2: </string>
+    <string name="etiqueta_progreso">Update the progress status</string>
+</resources>

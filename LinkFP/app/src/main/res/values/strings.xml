@@ -6,4 +6,5 @@
     <string name="historia">Esta aplicacion fue hecha para algo</string>
     <string name="sobre_nosotros">Informacion claramente nuestra</string>
     <string name="licencia">Licencia</string>
+    <string name="button_move_to_view">Boton para moverse a la pantalla %1$d</string>
 </resources>
