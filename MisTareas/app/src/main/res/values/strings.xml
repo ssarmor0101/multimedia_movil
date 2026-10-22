@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mis Tareas</string>
+    <string name="study_kotlin">Estudiar Kotlin</string>
+    <string name="do_job">Hacer ejercicio</string>
+    <string name="read_book">Leer un libro</string>
+    <string name="check_email">Revisar correos</string>
+    <string name="test">Prueba</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Tasks</string>
+    <string name="study_kotlin">Study Kotlin</string>
+    <string name="do_job">Do job</string>
+    <string name="read_book">Read a book</string>
+    <string name="check_email">Check email</string>
+    <string name="test">Test</string>
+</resources>
