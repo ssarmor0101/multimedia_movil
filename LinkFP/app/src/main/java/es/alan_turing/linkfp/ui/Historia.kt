@@ -14,7 +14,7 @@ fun Historia(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         Text(
-            text = stringResource(R.string.historia)
+            text = stringResource(R.string.historia_texto)
         )
     }
 }

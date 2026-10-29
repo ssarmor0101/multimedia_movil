@@ -13,7 +13,7 @@ fun Ayuda(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         Text(
-            text = stringResource(R.string.ayuda)
+            text = stringResource(R.string.ayuda_texto)
         )
     }
 }

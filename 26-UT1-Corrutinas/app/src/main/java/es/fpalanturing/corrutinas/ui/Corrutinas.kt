@@ -331,7 +331,7 @@ private fun simularDescargaFlow(): Flow<Float> = flow {
         delay(40L.milliseconds)
         emit(step / 100f) // Emite cada porcentaje de avance
     }
-}.flowOn(Dispatchers.Default)
+}
 
 
 // =============================================================================

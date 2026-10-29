@@ -14,7 +14,6 @@ import es.alan_turing.linkfp.ui.Pantalla2
 import es.alan_turing.linkfp.ui.theme.LinkFPTheme
 
 class SegundaActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

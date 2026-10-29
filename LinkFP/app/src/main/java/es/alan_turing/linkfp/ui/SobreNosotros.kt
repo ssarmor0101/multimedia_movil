@@ -13,7 +13,7 @@ fun SobreNosotros(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         Text(
-            text = stringResource(R.string.sobre_nosotros)
+            text = stringResource(R.string.sobre_nosotros_texto)
         )
     }
 }
