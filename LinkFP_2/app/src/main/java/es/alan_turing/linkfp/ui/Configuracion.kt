@@ -11,12 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import es.alan_turing.linkfp.R
-
-class ConfiguracionViewModel: ViewModel() {
-
-}
+import es.alan_turing.linkfp.viewmodel.ConfiguracionViewModel
 
 @Composable
 fun Configuracion(
@@ -36,6 +32,5 @@ fun Configuracion(
                 color = MaterialTheme.colorScheme.primary
             )
         }
-
     }
 }
