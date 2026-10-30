@@ -3,6 +3,7 @@ package es.alan_turing.linkfp.model
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -19,67 +20,41 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = CONFIGURACION_NAME
 )
 
-data class ConfiguracionData(
-    val clave: String = "default",
-    val valor: String = "default"
-)
-
 class ConfiguracionDataStore(private val context: Context) {
 
     companion object {
-        val CLAVE = stringPreferencesKey("clave")
-        val VALOR = stringPreferencesKey("valor")
+        val CHECK_BOX = booleanPreferencesKey("check_box")
+        val RADIO = stringPreferencesKey("radio")
     }
 
-    // Flow con ambos valores establecidos (clave y valor)
-    val preferenceFlow: Flow<ConfiguracionData> = context.dataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                exception.printStackTrace()
-                emit(emptyPreferences())
-            } else {
-                throw exception
+    fun <T> recoverFlow(clave: Preferences.Key<T>, defaultValue: T): Flow<T> {
+        return context.dataStore.data
+            .catch {
+                if (it is IOException) {
+                    it.printStackTrace()
+                    emit(emptyPreferences())
+                } else {
+                    throw it
+                }
             }
-        }
-        .map { preferences ->
-            val clave = preferences[CLAVE] ?: "default"
-            val valor = preferences[VALOR] ?: "default"
-            ConfiguracionData(clave = clave, valor = valor)
-        }
+            .map { preferences ->
+                // On the first run of the app
+                preferences[clave] ?: defaultValue
+            }
+    }
 
-    // Flows individuales opcionales para acceso directo
-    val claveFlow: Flow<String> = preferenceFlow.map { it.clave }
-    val valorFlow: Flow<String> = preferenceFlow.map { it.valor }
+    val checkBox: Flow<Boolean> = recoverFlow(CHECK_BOX, false)
+    val radio: Flow<String> = recoverFlow(RADIO, "default")
 
-    // Guardar clave
-    suspend fun saveClaveToPreferencesStore(clave: String, context: Context = this.context) {
-        context.dataStore.edit { preferences ->
-            preferences[CLAVE] = clave
+    suspend fun guardarCheckBox(valor: Boolean) {
+        context.dataStore.edit { preferencias ->
+            preferencias[CHECK_BOX] = valor
         }
     }
 
-    // Guardar valor
-    suspend fun saveValorToPreferencesStore(valor: String, context: Context = this.context) {
-        context.dataStore.edit { preferences ->
-            preferences[VALOR] = valor
+    suspend fun guardarRadio(valor: String) {
+        context.dataStore.edit { preferencias ->
+            preferencias[RADIO] = valor
         }
     }
-
-    // Guardar clave y valor simultáneamente
-    suspend fun saveConfiguracionToPreferencesStore(
-        clave: String,
-        valor: String,
-        context: Context = this.context
-    ) {
-        context.dataStore.edit { preferences ->
-            preferences[CLAVE] = clave
-            preferences[VALOR] = valor
-        }
-    }
-
-    // Métodos alias simplificados
-    suspend fun saveClave(clave: String) = saveClaveToPreferencesStore(clave)
-    suspend fun saveValor(valor: String) = saveValorToPreferencesStore(valor)
-    suspend fun saveConfiguracion(clave: String, valor: String) =
-        saveConfiguracionToPreferencesStore(clave, valor)
 }
