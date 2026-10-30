@@ -59,6 +59,7 @@ fun Inicio(modifier: Modifier = Modifier) {
             )
             Button(
                 onClick = {
+                    // Intent Explícito: Inicia la actividad SegundaActivity desde MainActivity
                     val intent = Intent(context, SegundaActivity::class.java)
                     context.startActivity(intent)
                 },
@@ -68,7 +69,6 @@ fun Inicio(modifier: Modifier = Modifier) {
             }
         }
 
-        AcercaDe()
         Ayuda()
         Historia()
         SobreNosotros()
@@ -83,6 +83,7 @@ fun Pantalla2(modifier: Modifier = Modifier) {
         modifier = modifier.padding(10.dp)
             .fillMaxSize()
     ) {
+        AcercaDe()
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -93,6 +94,7 @@ fun Pantalla2(modifier: Modifier = Modifier) {
             )
             Button(
                 onClick = {
+                    // Intent Explícito: Inicia MainActivity desde SegundaActivity
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 },
@@ -103,6 +105,7 @@ fun Pantalla2(modifier: Modifier = Modifier) {
         }
         Button(
             onClick = {
+                // Intent Implícito: Solicita al sistema abrir una URI externa (Google Maps / navegador web) con ACTION_VIEW
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/place/Parque+Tecnol%C3%B3gico+de+Andaluc%C3%ADa,+Campanillas,+29590+M%C3%A1laga/@36.7384356,-4.5621236,15z/data=!3m1!4b1!4m6!3m5!1s0xd72f1cd54795bd7:0x502d7a05bf98b90!8m2!3d36.7356241!4d-4.5495489!16s%2Fm%2F080bnh9?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D"))
                 context.startActivity(intent)
             }
