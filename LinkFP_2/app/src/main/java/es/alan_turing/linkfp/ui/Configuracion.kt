@@ -1,20 +1,26 @@
 package es.alan_turing.linkfp.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -118,7 +124,47 @@ fun Configuracion(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Ejemplo 3: Menú Desplegable (DropdownMenu) conectado con ViewModel y DataStore
+        Text(
+            text = "Selecciona del desplegable (Actual: ${uiState.dropdown}):",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        var dropdownExpanded by remember { mutableStateOf(false) }
+        val opcionesDropdown = listOf("Opción A", "Opción B", "Opción C", "Opción D")
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
+            Button(
+                onClick = { dropdownExpanded = true }
+            ) {
+                Text(text = "Desplegable: ${uiState.dropdown}")
+            }
+
+            DropdownMenu(
+                expanded = dropdownExpanded,
+                onDismissRequest = { dropdownExpanded = false }
+            ) {
+                opcionesDropdown.forEach { opcion ->
+                    DropdownMenuItem(
+                        text = { Text(text = opcion) },
+                        onClick = {
+                            viewModel.updateDropdown(opcion)
+                            dropdownExpanded = false
+                        }
+                    )
+                }
+            }
+        }
     }
 }
+
 
 

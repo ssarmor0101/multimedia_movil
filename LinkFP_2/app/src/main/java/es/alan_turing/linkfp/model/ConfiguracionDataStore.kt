@@ -32,6 +32,8 @@ class ConfiguracionDataStore(private val context: Context) {
         val CHECK_BOX = booleanPreferencesKey("check_box")
         /** Clave para guardar y recuperar el valor tipo cadena de la opción Radio. */
         val RADIO = stringPreferencesKey("radio")
+        /** Clave para guardar y recuperar la opción seleccionada en el Dropdown. */
+        val DROPDOWN = stringPreferencesKey("dropdown")
     }
 
     /**
@@ -65,6 +67,9 @@ class ConfiguracionDataStore(private val context: Context) {
     /** Flow reactivo que emite el estado guardado del grupo Radio (por defecto: "default"). */
     val radio: Flow<String> = recoverFlow(RADIO, "default")
 
+    /** Flow reactivo que emite el estado guardado del Dropdown (por defecto: "Opción A"). */
+    val dropdown: Flow<String> = recoverFlow(DROPDOWN, "Opción A")
+
     /**
      * Persiste el estado del CheckBox en el almacén de DataStore.
      *
@@ -84,6 +89,17 @@ class ConfiguracionDataStore(private val context: Context) {
     suspend fun guardarRadio(valor: String) {
         context.dataStore.edit { preferencias ->
             preferencias[RADIO] = valor
+        }
+    }
+
+    /**
+     * Persiste la opción seleccionada del menú desplegable (Dropdown) en el almacén de DataStore.
+     *
+     * @param valor Nuevo valor de texto seleccionado del menú desplegable.
+     */
+    suspend fun guardarDropdown(valor: String) {
+        context.dataStore.edit { preferencias ->
+            preferencias[DROPDOWN] = valor
         }
     }
 }
