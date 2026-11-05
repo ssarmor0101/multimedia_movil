@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name" translatable="false">LinkFP</string>
+    <string name="hello_world">¡Hola Mundo!</string>
+    <string name="acerca_de_texto">LinkFP es una aplicación para facilitar la búsqueda de empresas donde realizar las practicas de los estudios de Formación Profesional. Esta aplicacion es para el Proyecto Intermodular hecho por:</string>
+    <string name="ayuda_texto">Aqui te ayudamos</string>
+    <string name="historia_texto">Esta aplicacion fue hecha para algo</string>
+    <string name="sobre_nosotros_texto">Informacion claramente nuestra</string>
+    <string name="licencia">Licencia</string>
+    <string name="button_move_to_view">Boton para moverse a la pantalla %1$d</string>
+    <string name="button">Boton</string>
+    <string name="configuracion">Configuracion</string>
+    <string name="acerca_de">Acerca De</string>
+    <string name="sobre_nosotros">Sobre Nosotros</string>
+    <string name="historia">Historia</string>
+    <string name="ayuda">Ayuda</string>
+</resources>
