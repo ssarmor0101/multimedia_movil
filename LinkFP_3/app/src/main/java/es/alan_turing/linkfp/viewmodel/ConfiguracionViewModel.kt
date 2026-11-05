@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import es.alan_turing.linkfp.model.ConfiguracionDataStore
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
@@ -25,8 +27,9 @@ data class ConfiguracionData(
 
 /**
  * ViewModel encargado de la lógica de negocio y gestión del estado UI para la pantalla de Configuración.
- * Interactúa directamente con [ConfiguracionDataStore] para consultar y guardar las preferencias.
- * 
+ * Mantiene un estado local en memoria y solo persiste los datos en [ConfiguracionDataStore] cuando el
+ * usuario pulsa explícitamente el botón de guardar.
+ *
  * Al no usar inyección de dependencias, proporciona la clase anidada [Factory] para su instanciación
  * mediante el ViewModelProvider en Compose o en la Activity.
  *
@@ -36,53 +39,67 @@ class ConfiguracionViewModel(
     private val dataStore: ConfiguracionDataStore
 ) : ViewModel() {
 
-    /**
-     * Estado UI expuesto como un [StateFlow] de solo lectura.
-     * Combina en tiempo real los flujos [ConfiguracionDataStore.checkBox], [ConfiguracionDataStore.radio]
-     * y [ConfiguracionDataStore.dropdown] expuestos por el DataStore y los emite encapsulados en [ConfiguracionData].
-     */
-    val uiState: StateFlow<ConfiguracionData> = combine(
-        dataStore.checkBox,
-        dataStore.radio,
-        dataStore.dropdown
-    ) { checkbox, radio, dropdown ->
-        ConfiguracionData(checkbox = checkbox, radio = radio, dropdown = dropdown)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = ConfiguracionData()
-    )
+    // Estado UI mutable privado
+    private val _uiState = MutableStateFlow(ConfiguracionData())
 
     /**
-     * Modifica y persiste la preferencia del CheckBox en el DataStore de forma asíncrona.
+     * Estado UI expuesto como un [StateFlow] de solo lectura para la vista.
+     */
+    val uiState: StateFlow<ConfiguracionData> = _uiState.asStateFlow()
+
+    init {
+        // Carga inicial de datos guardados en DataStore hacia el estado UI en memoria
+        viewModelScope.launch {
+            combine(
+                dataStore.checkBox,
+                dataStore.radio,
+                dataStore.dropdown
+            ) { checkbox, radio, dropdown ->
+                ConfiguracionData(checkbox = checkbox, radio = radio, dropdown = dropdown)
+            }.first { datos ->
+                _uiState.value = datos
+                true
+            }
+        }
+    }
+
+    /**
+     * Modifica el estado en memoria para la casilla de verificación (CheckBox) sin guardar en DataStore.
      *
      * @param valor Nuevo estado booleano para el CheckBox.
      */
     fun updateCheckBox(valor: Boolean) {
-        viewModelScope.launch {
-            dataStore.guardarCheckBox(valor)
-        }
+        _uiState.update { it.copy(checkbox = valor) }
     }
 
     /**
-     * Modifica y persiste la preferencia de la opción Radio en el DataStore de forma asíncrona.
+     * Modifica el estado en memoria para la opción Radio sin guardar en DataStore.
      *
      * @param valor Nuevo valor de texto para el botón de radio.
      */
     fun updateRadio(valor: String) {
-        viewModelScope.launch {
-            dataStore.guardarRadio(valor)
-        }
+        _uiState.update { it.copy(radio = valor) }
     }
 
     /**
-     * Modifica y persiste la preferencia del menú desplegable (Dropdown) en el DataStore de forma asíncrona.
+     * Modifica el estado en memoria para el menú desplegable (Dropdown) sin guardar en DataStore.
      *
      * @param valor Nuevo valor de texto para la opción elegida en el menú desplegable.
      */
     fun updateDropdown(valor: String) {
+        _uiState.update { it.copy(dropdown = valor) }
+    }
+
+    /**
+     * Persiste de forma asíncrona todos los valores actuales del estado UI en el [ConfiguracionDataStore]
+     * al ser llamado mediante la acción del botón de guardar.
+     */
+    fun guardarConfiguracion() {
         viewModelScope.launch {
-            dataStore.guardarDropdown(valor)
+            val datosActuales = _uiState.value
+            dataStore.guardarCheckBox(datosActuales.checkbox)
+            dataStore.guardarRadio(datosActuales.radio)
+            dataStore.guardarDropdown(datosActuales.dropdown)
         }
     }
 
@@ -102,3 +119,4 @@ class ConfiguracionViewModel(
         }
     }
 }
+

@@ -163,8 +163,25 @@ fun Configuracion(
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Botón para confirmar y guardar explícitamente las modificaciones en el DataStore
+        Button(
+            onClick = {
+                viewModel.guardarConfiguracion()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Guardar Cambios",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
+
 
 
 

@@ -12,20 +12,6 @@ import es.alan_turing.linkfp.ui.Configuracion
 import es.alan_turing.linkfp.ui.Inicio
 import es.alan_turing.linkfp.ui.theme.LinkFPTheme
 
-//class MainActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
-//        setContent {
-//            LinkFPTheme(dynamicColor = false) {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Inicio(modifier = Modifier.padding(innerPadding));
-//                }
-//            }
-//        }
-//    }
-//}
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +19,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             LinkFPTheme(dynamicColor = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Configuracion(modifier = Modifier.padding(innerPadding));
+//                    val NavegacionApp = NavegacionApp()
+//
+//                    NavegacionApp.NavHost(
+//                        modifier = Modifier.padding(innerPadding)
+//                    )
                 }
             }
         }
