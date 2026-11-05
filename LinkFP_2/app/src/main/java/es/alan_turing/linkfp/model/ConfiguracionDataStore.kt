@@ -15,18 +15,34 @@ import java.io.IOException
 
 private const val CONFIGURACION_NAME = "configuracion"
 
-// Instancia de DataStore utilizando el delegado preferencesDataStore con Context como receptor
+// Instancia única de DataStore delegada mediante preferencesDataStore asociándola al Context
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = CONFIGURACION_NAME
 )
 
+/**
+ * Gestor del almacenamiento persistente de preferencias de la aplicación mediante Preferences DataStore.
+ *
+ * @property context El contexto necesario de la aplicación para interactuar con la fuente de datos de DataStore.
+ */
 class ConfiguracionDataStore(private val context: Context) {
 
     companion object {
+        /** Clave para guardar y recuperar el valor booleano del CheckBox. */
         val CHECK_BOX = booleanPreferencesKey("check_box")
+        /** Clave para guardar y recuperar el valor tipo cadena de la opción Radio. */
         val RADIO = stringPreferencesKey("radio")
     }
 
+    /**
+     * Recupera un flujo ([Flow]) de datos asociado a una clave específica de Preferences.
+     * En caso de producirse un error de E/S ([IOException]), captura la excepción y emite preferencias vacías.
+     *
+     * @param T Tipo de dato que almacena la preferencia.
+     * @param clave La clave de la preferencia a recuperar.
+     * @param defaultValue Valor por defecto que se retornará en caso de que la clave no esté definida.
+     * @return [Flow] que emite de forma reactiva el valor de la preferencia solicitada.
+     */
     fun <T> recoverFlow(clave: Preferences.Key<T>, defaultValue: T): Flow<T> {
         return context.dataStore.data
             .catch {
@@ -38,23 +54,37 @@ class ConfiguracionDataStore(private val context: Context) {
                 }
             }
             .map { preferences ->
-                // On the first run of the app
+                // Retorna la preferencia guardada o el valor por defecto en caso de no existir
                 preferences[clave] ?: defaultValue
             }
     }
 
+    /** Flow reactivo que emite el estado guardado del CheckBox (por defecto: false). */
     val checkBox: Flow<Boolean> = recoverFlow(CHECK_BOX, false)
+
+    /** Flow reactivo que emite el estado guardado del grupo Radio (por defecto: "default"). */
     val radio: Flow<String> = recoverFlow(RADIO, "default")
 
+    /**
+     * Persiste el estado del CheckBox en el almacén de DataStore.
+     *
+     * @param valor Nuevo estado booleano.
+     */
     suspend fun guardarCheckBox(valor: Boolean) {
         context.dataStore.edit { preferencias ->
             preferencias[CHECK_BOX] = valor
         }
     }
 
+    /**
+     * Persiste la opción seleccionada del grupo Radio en el almacén de DataStore.
+     *
+     * @param valor Nuevo valor de texto asignado a la opción radio.
+     */
     suspend fun guardarRadio(valor: String) {
         context.dataStore.edit { preferencias ->
             preferencias[RADIO] = valor
         }
     }
 }
+
