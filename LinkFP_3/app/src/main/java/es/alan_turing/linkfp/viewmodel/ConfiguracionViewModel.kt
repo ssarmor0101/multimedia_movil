@@ -21,17 +21,14 @@ import kotlinx.coroutines.launch
  */
 data class ConfiguracionData(
     val checkbox: Boolean = false,
-    val radio: String = "default",
+    val radio: String = "Opción 1",
     val dropdown: String = "Opción A"
 )
 
 /**
  * ViewModel encargado de la lógica de negocio y gestión del estado UI para la pantalla de Configuración.
  * Mantiene un estado local en memoria y solo persiste los datos en [ConfiguracionDataStore] cuando el
- * usuario pulsa explícitamente el botón de guardar.
- *
- * Al no usar inyección de dependencias, proporciona la clase anidada [Factory] para su instanciación
- * mediante el ViewModelProvider en Compose o en la Activity.
+ * usuario valida y guarda la configuración.
  *
  * @property dataStore Instancia del almacén de preferencias de la aplicación.
  */
@@ -39,7 +36,6 @@ class ConfiguracionViewModel(
     private val dataStore: ConfiguracionDataStore
 ) : ViewModel() {
 
-    // Estado UI mutable privado
     private val _uiState = MutableStateFlow(ConfiguracionData())
 
     /**
@@ -64,35 +60,28 @@ class ConfiguracionViewModel(
     }
 
     /**
-     * Modifica el estado en memoria para la casilla de verificación (CheckBox) sin guardar en DataStore.
-     *
-     * @param valor Nuevo estado booleano para el CheckBox.
+     * Modifica el estado en memoria para la casilla de verificación (CheckBox).
      */
     fun updateCheckBox(valor: Boolean) {
         _uiState.update { it.copy(checkbox = valor) }
     }
 
     /**
-     * Modifica el estado en memoria para la opción Radio sin guardar en DataStore.
-     *
-     * @param valor Nuevo valor de texto para el botón de radio.
+     * Modifica el estado en memoria para la opción Radio.
      */
     fun updateRadio(valor: String) {
         _uiState.update { it.copy(radio = valor) }
     }
 
     /**
-     * Modifica el estado en memoria para el menú desplegable (Dropdown) sin guardar en DataStore.
-     *
-     * @param valor Nuevo valor de texto para la opción elegida en el menú desplegable.
+     * Modifica el estado en memoria para el menú desplegable (Dropdown).
      */
     fun updateDropdown(valor: String) {
         _uiState.update { it.copy(dropdown = valor) }
     }
 
     /**
-     * Persiste de forma asíncrona todos los valores actuales del estado UI en el [ConfiguracionDataStore]
-     * al ser llamado mediante la acción del botón de guardar.
+     * Persiste de forma asíncrona todos los valores actuales del estado UI en el [ConfiguracionDataStore].
      */
     fun guardarConfiguracion() {
         viewModelScope.launch {
@@ -104,10 +93,22 @@ class ConfiguracionViewModel(
     }
 
     /**
+     * Realiza la comprobación requerida: verifica si el checkbox está activado.
+     * Si se cumple la condición, guarda la configuración y retorna true.
+     * Si no se cumple, retorna false.
+     */
+    fun validarYGuardar(): Boolean {
+        return if (_uiState.value.checkbox) {
+            guardarConfiguracion()
+            true
+        } else {
+            false
+        }
+    }
+
+    /**
      * Factoría ([ViewModelProvider.Factory]) requerida para instanciar el [ConfiguracionViewModel]
      * pasando la dependencia de [ConfiguracionDataStore] sin usar Inyección de Dependencias.
-     *
-     * @property dataStore Instancia de [ConfiguracionDataStore] necesaria para la creación del ViewModel.
      */
     class Factory(private val dataStore: ConfiguracionDataStore) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -119,4 +120,3 @@ class ConfiguracionViewModel(
         }
     }
 }
-

@@ -1,10 +1,12 @@
 package es.alan_turing.linkfp.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,6 +15,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.navigation.NavHostController
 import es.alan_turing.linkfp.R
 import es.alan_turing.linkfp.model.ConfiguracionDataStore
 import es.alan_turing.linkfp.viewmodel.ConfiguracionViewModel
@@ -38,16 +42,18 @@ import es.alan_turing.linkfp.viewmodel.ConfiguracionViewModel
  * Pantalla de configuración que hace uso de [ConfiguracionViewModel] y [ConfiguracionDataStore]
  * para mostrar y modificar preferencias persistentes.
  *
- * Sin inyección de dependencias: se instancian manualmente el [ConfiguracionDataStore] y la
- * [ConfiguracionViewModel.Factory] a través de [ViewModelProvider].
- *
+ * @param navController Controlador de navegación para regresar a la pantalla principal.
  * @param modifier Modificador de estilo para la columna principal.
  */
 @Composable
 fun Configuracion(
-    modifier: Modifier = Modifier
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+
+    val toastExitoMsg = stringResource(R.string.toast_configuracion_guardada)
+    val toastErrorMsg = stringResource(R.string.toast_configuracion_error)
 
     // Instanciación del ViewModel y DataStore sin frameworks de inyección de dependencias
     val viewModel: ConfiguracionViewModel = remember(context) {
@@ -64,74 +70,76 @@ fun Configuracion(
     val uiState by viewModel.uiState.collectAsState()
 
     Column(
-        modifier = modifier.padding(16.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = stringResource(R.string.configuracion),
-                fontSize = 50.sp,
+                fontSize = 40.sp,
                 fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Ejemplo 1: Checkbox conectado con ViewModel y DataStore
+        // Checkbox conectado con ViewModel y DataStore
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Checkbox(
                 checked = uiState.checkbox,
                 onCheckedChange = { nuevoValor ->
                     viewModel.updateCheckBox(nuevoValor)
-                }
+                },
             )
             Text(
-                text = "Checkbox activado: ${uiState.checkbox}",
-                fontSize = 18.sp
+                text = stringResource(R.string.checkbox_estado, uiState.checkbox),
+                fontSize = 18.sp,
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Ejemplo 2: Opciones de RadioButton conectadas con ViewModel y DataStore
+        // RadioButton conectado con ViewModel y DataStore
         Text(
-            text = "Selecciona una opción (Actual: ${uiState.radio}):",
+            text = stringResource(R.string.selecciona_opcion, uiState.radio),
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         val opcionesRadio = listOf("Opción 1", "Opción 2", "Opción 3")
         opcionesRadio.forEach { opcion ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 RadioButton(
                     selected = (uiState.radio == opcion),
                     onClick = {
                         viewModel.updateRadio(opcion)
-                    }
+                    },
                 )
                 Text(
                     text = opcion,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Ejemplo 3: Menú Desplegable (DropdownMenu) conectado con ViewModel y DataStore
+        // DropdownMenu conectado con ViewModel y DataStore
         Text(
-            text = "Selecciona del desplegable (Actual: ${uiState.dropdown}):",
+            text = stringResource(R.string.selecciona_desplegable, uiState.dropdown),
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         var dropdownExpanded by remember { mutableStateOf(false) }
@@ -140,17 +148,17 @@ fun Configuracion(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp)
+                .padding(top = 8.dp),
         ) {
             Button(
-                onClick = { dropdownExpanded = true }
+                onClick = { dropdownExpanded = true },
             ) {
-                Text(text = "Desplegable: ${uiState.dropdown}")
+                Text(text = stringResource(R.string.desplegable_prefix, uiState.dropdown))
             }
 
             DropdownMenu(
                 expanded = dropdownExpanded,
-                onDismissRequest = { dropdownExpanded = false }
+                onDismissRequest = { dropdownExpanded = false },
             ) {
                 opcionesDropdown.forEach { opcion ->
                     DropdownMenuItem(
@@ -158,7 +166,7 @@ fun Configuracion(
                         onClick = {
                             viewModel.updateDropdown(opcion)
                             dropdownExpanded = false
-                        }
+                        },
                     )
                 }
             }
@@ -166,22 +174,42 @@ fun Configuracion(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Botón para confirmar y guardar explícitamente las modificaciones en el DataStore
+        // Botón para validar y guardar cambios
         Button(
             onClick = {
-                viewModel.guardarConfiguracion()
+                val esValido = viewModel.validarYGuardar()
+                if (esValido) {
+                    Toast.makeText(
+                        context,
+                        toastExitoMsg,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    navController.popBackStack()
+                } else {
+                    Toast.makeText(
+                        context,
+                        toastErrorMsg,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = "Guardar Cambios",
+                text = stringResource(R.string.guardar_cambios),
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Botón para volver a la pantalla principal
+        OutlinedButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(text = stringResource(R.string.volver))
         }
     }
 }
-
-
-
-
