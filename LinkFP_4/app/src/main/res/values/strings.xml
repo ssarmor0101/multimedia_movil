@@ -31,4 +31,9 @@
     <string name="selecciona_opcion">Selecciona una opción (Actual: %1$s):</string>
     <string name="selecciona_desplegable">Selecciona del desplegable (Actual: %1$s):</string>
     <string name="desplegable_prefix">Desplegable: %1$s</string>
+
+    <!-- Pokédex -->
+    <string name="pokedex">Pokédex</string>
+    <string name="pokemon_tipo">Tipo</string>
+    <string name="cargando_pokemons">Cargando Pokédex...</string>
 </resources>

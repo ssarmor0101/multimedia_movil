@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.filled.CatchingPokemon
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
@@ -138,6 +139,15 @@ fun Principal(
             title = stringResource(R.string.sobre_nosotros),
             icon = Icons.Default.Group,
             onClick = { navController.navigate(RutasNavegacion.SobreNosotros.route) },
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Opción: Pokédex -> Navega a la ruta "pokedex"
+        MenuItemCard(
+            title = stringResource(R.string.pokedex),
+            icon = Icons.Default.CatchingPokemon,
+            onClick = { navController.navigate(RutasNavegacion.Pokedex.route) },
         )
 
         Spacer(modifier = Modifier.height(12.dp))

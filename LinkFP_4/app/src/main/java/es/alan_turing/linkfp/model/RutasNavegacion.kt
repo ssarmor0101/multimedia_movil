@@ -38,4 +38,7 @@ sealed class RutasNavegacion(val route: String) {
 
     /** Ruta de la pantalla con información detallada de nuestro equipo */
     data object SobreNosotros : RutasNavegacion("sobre_nosotros")
+
+    /** Ruta de la pantalla de Pokédex que consume la API remota */
+    data object Pokedex : RutasNavegacion("pokedex")
 }

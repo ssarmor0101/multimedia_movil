@@ -32,4 +32,9 @@
     <string name="selecciona_opcion">Select an option (Current: %1$s):</string>
     <string name="selecciona_desplegable">Select from dropdown (Current: %1$s):</string>
     <string name="desplegable_prefix">Dropdown: %1$s</string>
+
+    <!-- Pokédex -->
+    <string name="pokedex">Pokédex</string>
+    <string name="pokemon_tipo">Type</string>
+    <string name="cargando_pokemons">Loading Pokédex...</string>
 </resources>

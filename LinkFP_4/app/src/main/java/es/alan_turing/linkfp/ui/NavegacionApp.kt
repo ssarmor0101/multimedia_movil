@@ -86,5 +86,10 @@ fun NavegacionApp(
         composable(RutasNavegacion.SobreNosotros.route) {
             SobreNosotros(navController = navController)
         }
+
+        // Pantalla Pokédex
+        composable(RutasNavegacion.Pokedex.route) {
+            Pokedex(navController = navController)
+        }
     }
 }
