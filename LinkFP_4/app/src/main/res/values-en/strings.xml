@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">LinkFP</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="acerca_de_texto">LinkFP is an app made to make easier the task of finding a company to do some practice for Vocational Training studies. This app is for the Intermodular Project made by:</string>
+    <string name="ayuda_texto">Here we help you with the app usage.</string>
+    <string name="historia_texto">This application was created as part of the Vocational Training intermodular project.</string>
+    <string name="sobre_nosotros_texto">Information about our development team.</string>
+    <string name="licencia">License</string>
+    <string name="button_move_to_view">Button for moving to view %1$d</string>
+    <string name="button">Button</string>
+    <string name="configuracion">Configuration</string>
+    <string name="acerca_de">About</string>
+    <string name="sobre_nosotros">About Us</string>
+    <string name="historia">History</string>
+    <string name="ayuda">Help</string>
+
+    <!-- Navigation & Main Menu -->
+    <string name="menu_principal">Main Menu</string>
+    <string name="salir_aplicacion">Exit Application</string>
+    <string name="dialog_salir_titulo">Exit Confirmation</string>
+    <string name="dialog_salir_mensaje">Are you sure you want to exit the application?</string>
+    <string name="confirmar">Confirm</string>
+    <string name="cancelar">Cancel</string>
+    <string name="volver">Back</string>
+
+    <!-- Configuration & Toasts -->
+    <string name="guardar_cambios">Save Changes</string>
+    <string name="toast_configuracion_guardada">Configuration saved successfully.</string>
+    <string name="toast_configuracion_error">You must check the box to be able to save configuration.</string>
+    <string name="checkbox_estado">Checkbox active: %1$b</string>
+    <string name="selecciona_opcion">Select an option (Current: %1$s):</string>
+    <string name="selecciona_desplegable">Select from dropdown (Current: %1$s):</string>
+    <string name="desplegable_prefix">Dropdown: %1$s</string>
+</resources>
