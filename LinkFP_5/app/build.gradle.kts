@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.auth)
     // Jetpack Compose
     implementation("androidx.activity:activity-compose:1.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
