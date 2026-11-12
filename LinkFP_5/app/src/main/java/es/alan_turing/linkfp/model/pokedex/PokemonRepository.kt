@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import es.alan_turing.linkfp.R
+import es.alan_turing.linkfp.model.RetrofitInstance
 
 /**
  * ==============================================================================================
@@ -24,7 +25,7 @@ import es.alan_turing.linkfp.R
  *      Gson, garantizando que la aplicación continúe funcionando perfectamente sin cerrarse.
  * ==============================================================================================
  *
- * @param clientePokemon Cliente de red inyectado o por defecto [RetrofitInstance.api].
+ * @param clientePokemon Cliente de red inyectado o por defecto [es.alan_turing.linkfp.model.RetrofitInstance.api].
  */
 class PokemonRepository(
     private val clientePokemon: ClientePokemon = RetrofitInstance.api

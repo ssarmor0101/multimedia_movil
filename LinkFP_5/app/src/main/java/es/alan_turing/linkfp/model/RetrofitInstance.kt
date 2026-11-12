@@ -1,5 +1,6 @@
-package es.alan_turing.linkfp.model.pokedex
+package es.alan_turing.linkfp.model
 
+import es.alan_turing.linkfp.model.pokedex.ClientePokemon
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -44,7 +45,7 @@ object RetrofitInstance {
             .build()
     }
 
-    /** Servicio API expuesto para realizar peticiones relativas usando la interfaz [ClientePokemon] */
+    /** Servicio API expuesto para realizar peticiones relativas usando la interfaz [es.alan_turing.linkfp.model.pokedex.ClientePokemon] */
     val api: ClientePokemon by lazy {
         retrofit.create(ClientePokemon::class.java)
     }

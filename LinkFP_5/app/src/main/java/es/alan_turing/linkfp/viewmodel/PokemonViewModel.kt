@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
  *
  * @param repository Instancia del repositorio de datos [PokemonRepository].
  */
-class ViewModelPokemon(
+class PokemonViewModel(
     private val repository: PokemonRepository = PokemonRepository()
 ) : ViewModel() {
 
