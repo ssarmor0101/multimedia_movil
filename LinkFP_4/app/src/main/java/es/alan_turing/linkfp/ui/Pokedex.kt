@@ -40,9 +40,39 @@ import es.alan_turing.linkfp.model.pokedex.DatosPokemon
 import es.alan_turing.linkfp.viewmodel.ViewModelPokemon
 
 /**
- * Pantalla principal de la Pokédex.
- * Obtiene la lista de Pokémon desde [ViewModelPokemon] y muestra un indicador de carga circular
- * mientras la lista esté vacía. Una vez cargada, invoca a [PokedexList].
+ * ==============================================================================================
+ * ¿CÓMO FUNCIONA LA PANTALLA POKÉDEX, LA CARGA ASÍNCRONA Y EL COMPONENTE ASYNCIMAGE DE COIL?
+ * ==============================================================================================
+ *
+ * 1. ¿QUÉ HACE ESTA PANTALLA?:
+ *    Es el componible principal de la vista Pokédex. Conecta la capa de UI con el [ViewModelPokemon]
+ *    y reacciona a los cambios de estado mostrando un indicador circular de progreso (`CircularProgressIndicator`)
+ *    mientras los datos se están descargando desde Retrofit 2, y renderizando un `LazyColumn` cuando
+ *    la información está disponible.
+ *
+ * 2. ¿CÓMO FUNCIONAN SUS COMPONENTES? (Explicación detallada):
+ *
+ *    A) `LaunchedEffect(Unit)`:
+ *       - Ejecuta un bloque de código con corrutinas de manera segura dentro del ciclo de vida del
+ *         componible la primera vez que la pantalla entra en la composición.
+ *       - Dispara `cargarPokemons()` únicamente si la lista de Pokémon aún está vacía.
+ *
+ *    B) `LazyColumn` Y `PokedexList`:
+ *       - Es el equivalente moderno en Jetpack Compose al `RecyclerView` tradicional de Android.
+ *       - Renderiza eficientemente solo los elementos visibles en pantalla, reciclando las vistas
+ *         a medida que el usuario realiza desplazamientos (scroll).
+ *
+ *    C) CARGA ASÍNCRONA DE IMÁGENES CON COIL 3 (`AsyncImage`):
+ *       - Las URLs obtenidas del servidor (ej: "http://www.serebii.net/pokemongo/pokemon/001.png")
+ *         son procesadas dinámicamente con `pokemon.img.replace("http://", "https://")` para
+ *         garantizar la seguridad de la conexión HTTPS.
+ *       - `AsyncImage` descarga la imagen de Internet en segundo plano, la almacena en caché en el
+ *         dispositivo y muestra un `placeholder` o imagen de error local mientras se completa la descarga.
+ * ==============================================================================================
+ *
+ * @param navController Controlador de navegación para permitir volver atrás con `popBackStack()`.
+ * @param viewModelPokemon Instancia del ViewModel que administra la lista de Pokémon y su estado.
+ * @param modifier Modificador de diseño.
  */
 @Composable
 fun Pokedex(
@@ -53,6 +83,7 @@ fun Pokedex(
     val context = LocalContext.current
     val listaPokemons by viewModelPokemon.listaPokemons
 
+    // Efecto secundario para disparar la carga asíncrona al abrir la pantalla
     LaunchedEffect(Unit) {
         if (listaPokemons.isEmpty()) {
             viewModelPokemon.cargarPokemons(context)
@@ -79,6 +110,7 @@ fun Pokedex(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Si la lista está vacía, se muestra el indicador circular de progreso (CircularProgressIndicator)
         if (listaPokemons.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -98,6 +130,7 @@ fun Pokedex(
                 }
             }
         } else {
+            // Cuando la lista ha cargado sus elementos, invoca a PokedexList
             Box(
                 modifier = Modifier.weight(1f)
             ) {
@@ -119,7 +152,10 @@ fun Pokedex(
 }
 
 /**
- * Despliega una lista perezosa (LazyColumn) con los Pokémon pasados por parámetro.
+ * Componente que despliega la lista perezosa (LazyColumn) de Pokémons.
+ *
+ * @param listaPokemons Lista de datos obtenidos desde la API.
+ * @param modifier Modificador de diseño.
  */
 @Composable
 fun PokedexList(
@@ -136,8 +172,11 @@ fun PokedexList(
 }
 
 /**
- * Representa cada elemento (tarjeta) de la Pokédex.
- * Muestra la imagen remota asíncrona mediante [AsyncImage], el número, nombre y tipos del Pokémon.
+ * Representa la tarjeta individual de cada Pokémon (PokedexItem).
+ * Utiliza [AsyncImage] para descargar y mostrar la imagen del Pokémon desde la web.
+ *
+ * @param pokemon Datos del Pokémon a renderizar.
+ * @param modifier Modificador de diseño.
  */
 @Composable
 fun PokedexItem(
@@ -158,6 +197,7 @@ fun PokedexItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Carga asíncrona de la imagen remota con Coil 3 reemplazando http por https
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(pokemon.img.replace("http://", "https://"))
