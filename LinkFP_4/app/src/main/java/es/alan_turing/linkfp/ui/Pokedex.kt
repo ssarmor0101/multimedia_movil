@@ -37,7 +37,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import es.alan_turing.linkfp.R
 import es.alan_turing.linkfp.model.pokedex.DatosPokemon
-import es.alan_turing.linkfp.viewmodel.ViewModelPokemon
+import es.alan_turing.linkfp.viewmodel.PokemonViewModel
 
 /**
  * ==============================================================================================
@@ -45,7 +45,7 @@ import es.alan_turing.linkfp.viewmodel.ViewModelPokemon
  * ==============================================================================================
  *
  * 1. ¿QUÉ HACE ESTA PANTALLA?:
- *    Es el componible principal de la vista Pokédex. Conecta la capa de UI con el [ViewModelPokemon]
+ *    Es el componible principal de la vista Pokédex. Conecta la capa de UI con el [PokemonViewModel]
  *    y reacciona a los cambios de estado mostrando un indicador circular de progreso (`CircularProgressIndicator`)
  *    mientras los datos se están descargando desde Retrofit 2, y renderizando un `LazyColumn` cuando
  *    la información está disponible.
@@ -71,22 +71,22 @@ import es.alan_turing.linkfp.viewmodel.ViewModelPokemon
  * ==============================================================================================
  *
  * @param navController Controlador de navegación para permitir volver atrás con `popBackStack()`.
- * @param viewModelPokemon Instancia del ViewModel que administra la lista de Pokémon y su estado.
+ * @param pokemonViewModel Instancia del ViewModel que administra la lista de Pokémon y su estado.
  * @param modifier Modificador de diseño.
  */
 @Composable
 fun Pokedex(
     navController: NavHostController? = null,
-    viewModelPokemon: ViewModelPokemon = viewModel(),
+    pokemonViewModel: PokemonViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val listaPokemons by viewModelPokemon.listaPokemons
+    val listaPokemons by pokemonViewModel.listaPokemons
 
     // Efecto secundario para disparar la carga asíncrona al abrir la pantalla
     LaunchedEffect(Unit) {
         if (listaPokemons.isEmpty()) {
-            viewModelPokemon.cargarPokemons(context)
+            pokemonViewModel.cargarPokemons(context)
         }
     }
 
