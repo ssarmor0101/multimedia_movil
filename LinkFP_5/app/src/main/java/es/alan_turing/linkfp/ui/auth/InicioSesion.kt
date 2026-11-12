@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import es.alan_turing.linkfp.viewmodel.InicioSesionViewModel
+import es.alan_turing.linkfp.viewmodel.AuthViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
@@ -15,7 +15,7 @@ import androidx.compose.runtime.setValue
 fun InicioSesion(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    inicioSesionViewModel: InicioSesionViewModel = InicioSesionViewModel()
+    authViewModel: AuthViewModel = AuthViewModel()
 ) {
     var email by remember { mutableStateOf("") }
 
