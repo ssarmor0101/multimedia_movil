@@ -17,19 +17,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CatchingPokemon
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,38 +48,46 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import es.alan_turing.linkfp.R
 import es.alan_turing.linkfp.model.RutasNavegacion
+import es.alan_turing.linkfp.viewmodel.AuthViewModel
 
 /**
  * ==============================================================================================
- * CÓMO FUNCIONA LA NAVEGACIÓN DESDE LA PANTALLA PRINCIPAL
+ * CÓMO FUNCIONA LA NAVEGACIÓN Y EL ESTADO DE SESIÓN EN LA PANTALLA PRINCIPAL
  * ==============================================================================================
  *
  * 1. ¿QUÉ HACE ESTA PANTALLA?:
- *    Muestra el menú de navegación de la app compuesto por tarjetas [ElevatedCard].
- *    Permite al usuario navegar a cualquiera de las pantallas secundarias o salir de la aplicación.
+ *    Muestra el menú principal de la aplicación mediante tarjetas navegables [ElevatedCard] y un
+ *    panel superior de control de sesión de usuario autenticado con Firebase.
  *
- * 2. ¿CÓMO FUNCIONA LA NAVEGACIÓN DESDE EVENTOS DE CLIC?:
- *    - Recibe como parámetro `navController: NavHostController`.
- *    - Al hacer clic en cada opción, se invoca `navController.navigate(RutasNavegacion.<DESTINO>.route)`.
- *    - Esta llamada notifica al controlador de navegación que apile (push) la nueva pantalla
- *      en la pila de retroceso (Back Stack) y actualice la UI visible en el `NavHost`.
- *    - Para la opción "Salir", se activa una variable de estado `showExitDialog` para mostrar un [AlertDialog]
- *      que, al ser confirmado, finaliza la actividad actual mediante `(context as? Activity)?.finish()`.
+ * 2. FUNCIONAMIENTO PEDAGÓGICO:
+ *    - **Control de Sesión**: Lee la propiedad `currentUser` emitida por [AuthViewModel.currentUser] mediante
+ *      `collectAsState()`.
+ *    - **Visualización Condicional de Usuario**: Muestra un componente [Text] indicando el correo del
+ *      usuario activo si hay una sesión iniciada, o bien "Sesión no iniciada" si no hay ninguna.
+ *    - **Acción con TextButton**: Muestra un [TextButton] para permitir al usuario iniciar sesión
+ *      (navegando a `RutasNavegacion.InicioSesion.route`) o bien finalizar la sesión actual ([AuthViewModel.logout]).
+ *    - **Navegación general**: Al hacer clic en cualquier tarjeta de opción, utiliza `navController.navigate(...)`.
  * ==============================================================================================
  *
- * @param navController Controlador de navegación expuesto para ejecutar `navigate()`.
- * @param modifier Modificador de diseño.
+ * @param navController Controlador de navegación para ejecutar `navigate()`.
+ * @param modifier Modificador visual para layout e insets.
+ * @param authViewModel Instancia del ViewModel de autenticación (por defecto `viewModel()`).
  */
 @Composable
 fun Principal(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    authViewModel: AuthViewModel = viewModel(),
 ) {
     val context = LocalContext.current
-    var showExitDialog by remember { mutableStateOf(false) }
+    var showExitDialog by remember { mutableStateOf(value = false) }
+
+    // Observamos la sesión del usuario actual desde Firebase
+    val currentUser by authViewModel.currentUser.collectAsState()
 
     Column(
         modifier = modifier
@@ -82,10 +96,11 @@ fun Principal(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        // Encabezado con el título de la pantalla
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
+                .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
@@ -96,7 +111,81 @@ fun Principal(
             )
         }
 
+        // ==========================================================================================
+        // TARJETA DE ESTADO DE SESIÓN Y BOTÓN DE INICIO / FINALIZACIÓN DE SESIÓN (REQUISITO RÚBRICA)
+        // ==========================================================================================
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        imageVector = if (currentUser != null) Icons.Default.Person else Icons.Default.AccountCircle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(32.dp),
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = if (currentUser != null) {
+                            stringResource(R.string.usuario_conectado, currentUser?.email ?: "")
+                        } else {
+                            stringResource(R.string.sesion_no_iniciada)
+                        },
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
+
+                // TextButton para permitir el inicio de sesión o la finalización de la misma
+                TextButton(
+                    onClick = {
+                        if (currentUser != null) {
+                            authViewModel.logout()
+                        } else {
+                            navController.navigate(RutasNavegacion.InicioSesion.route)
+                        }
+                    },
+                ) {
+                    Text(
+                        text = if (currentUser != null) {
+                            stringResource(R.string.cerrar_sesion)
+                        } else {
+                            stringResource(R.string.iniciar_sesion_boton)
+                        },
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Opción: Autenticación / Inicio de Sesión
+        MenuItemCard(
+            title = if (currentUser != null) stringResource(R.string.inicio_sesion) else stringResource(R.string.inicio_sesion_titulo),
+            icon = Icons.Default.AccountCircle,
+            onClick = { navController.navigate(RutasNavegacion.InicioSesion.route) },
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Opción: Configuración -> Navega a la ruta "configuracion"
         MenuItemCard(
@@ -227,7 +316,7 @@ private fun MenuItemCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        colors = androidx.compose.material3.CardDefaults.elevatedCardColors(
+        colors = CardDefaults.elevatedCardColors(
             containerColor = cardColor,
         ),
     ) {

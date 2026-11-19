@@ -37,4 +37,32 @@
     <string name="pokedex">Pokédex</string>
     <string name="pokemon_tipo">Type</string>
     <string name="cargando_pokemons">Loading Pokédex...</string>
+
+    <!-- Authentication & Firebase -->
+    <string name="inicio_sesion">Log In</string>
+    <string name="inicio_sesion_titulo">Sign In</string>
+    <string name="inicio_sesion_subtitulo">Enter your credentials to access your account</string>
+    <string name="registro">User Registration</string>
+    <string name="registro_titulo">Create an Account</string>
+    <string name="registro_subtitulo">Fill in your details to register in LinkFP</string>
+    <string name="email_label">Email Address</string>
+    <string name="email_hint">user@example.com</string>
+    <string name="password_label">Password</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="iniciar_sesion_boton">Log In</string>
+    <string name="registrarse_boton">Register</string>
+    <string name="cerrar_sesion">Log Out</string>
+    <string name="sesion_no_iniciada">Not logged in</string>
+    <string name="usuario_conectado">User: %1$s</string>
+    <string name="ir_a_registro">Don\'t have an account? Sign up here</string>
+    <string name="ir_a_inicio_sesion">Already have an account? Log in here</string>
+    <string name="error_campos_vacios">Please fill in all required fields.</string>
+    <string name="error_contrasenias_no_coinciden">Passwords do not match.</string>
+    <string name="error_contrasenia_corta">Password must be at least 6 characters long.</string>
+    <string name="error_email_invalido">Invalid email format.</string>
+    <string name="auth_exito_login">Logged in successfully!</string>
+    <string name="auth_exito_registro">Registered successfully!</string>
+    <string name="auth_error_generico">Authentication error: %1$s</string>
+    <string name="ocultar_contrasenia">Hide password</string>
+    <string name="mostrar_contrasenia">Show password</string>
 </resources>

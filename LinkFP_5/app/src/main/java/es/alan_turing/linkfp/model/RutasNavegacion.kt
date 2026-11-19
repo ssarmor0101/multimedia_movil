@@ -41,4 +41,10 @@ sealed class RutasNavegacion(val route: String) {
 
     /** Ruta de la pantalla de Pokédex que consume la API remota */
     data object Pokedex : RutasNavegacion("pokedex")
+
+    /** Ruta de la pantalla de inicio de sesión con Firebase */
+    data object InicioSesion : RutasNavegacion("inicio_sesion")
+
+    /** Ruta de la pantalla de registro de usuario con Firebase */
+    data object Registro : RutasNavegacion("registro")
 }

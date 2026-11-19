@@ -2,11 +2,15 @@ package es.alan_turing.linkfp.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import es.alan_turing.linkfp.model.RutasNavegacion
+import es.alan_turing.linkfp.ui.auth.InicioSesion
+import es.alan_turing.linkfp.ui.auth.Registro
+import es.alan_turing.linkfp.viewmodel.AuthViewModel
 
 /**
  * ==============================================================================================
@@ -26,29 +30,26 @@ import es.alan_turing.linkfp.model.RutasNavegacion
  *       - Se crea e inicializa mediante `rememberNavController()`, lo que garantiza que el objeto
  *         persista y conserve su estado durante la recomposición de la UI y los cambios de configuración.
  *
- *    B) EL CONTENEDOR DE NAVEGACIÓN (`NavHost`):
- *       - Es un contenedor Componible que actúa como un "marco de fotos" o "pantalla activa".
- *       - Recibe el `navController` y la ruta inicial (`startDestination`).
- *       - Muestra únicamente el Componible asociado a la ruta en la que se encuentra actualmente el
- *         `navController`.
+ *    B) COMPARTICIÓN DE VIEWMODEL DE AUTENTICACIÓN (AuthViewModel):
+ *       - Al instanciar `authViewModel: AuthViewModel = viewModel()` en el ámbito de `NavegacionApp`,
+ *         garantizamos que las pantallas [Principal], [InicioSesion] y [Registro] compartan la misma
+ *         sesión de usuario activa sin recurrir a inyección de dependencias con Dagger Hilt.
  *
- *    C) EL GRÁFICO DE NAVEGACIÓN Y BLOQUES `composable(route)`:
- *       - Dentro del bloque lambda de `NavHost`, registramos cada pantalla mediante `composable(ruta) { ... }`.
- *       - Cuando invocamos `navController.navigate("configuracion")`, el `NavController` busca en este
- *         registro, añade la nueva pantalla a la pila de retroceso (Back Stack) y `NavHost` actualiza
- *         la pantalla visible.
- *       - Cuando invocamos `navController.popBackStack()`, la pantalla actual se elimina de la pila
- *         y se vuelve a mostrar la pantalla anterior en el historial.
+ *    C) EL CONTENEDOR DE NAVEGACIÓN (`NavHost`):
+ *       - Recibe el `navController` y la ruta inicial (`startDestination`).
+ *       - Registramos cada pantalla mediante `composable(ruta) { ... }`.
  * ==============================================================================================
  *
  * @param modifier Modificador de diseño para ajustar márgenes e insets (Padding del Scaffold).
  * @param navController Instancia del controlador de navegación (por defecto `rememberNavController()`).
+ * @param authViewModel Instancia compartida del ViewModel de autenticación.
  * @param startDestination Ruta inicial donde arrancará la aplicación (por defecto `Principal`).
  */
 @Composable
 fun NavegacionApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    authViewModel: AuthViewModel = viewModel(),
     startDestination: String = RutasNavegacion.Principal.route,
 ) {
     // NavHost vincula el controlador de navegación con el mapa/gráfico de pantallas
@@ -59,7 +60,26 @@ fun NavegacionApp(
     ) {
         // Pantalla Principal (Menú)
         composable(RutasNavegacion.Principal.route) {
-            Principal(navController = navController)
+            Principal(
+                navController = navController,
+                authViewModel = authViewModel,
+            )
+        }
+
+        // Pantalla de Inicio de Sesión
+        composable(RutasNavegacion.InicioSesion.route) {
+            InicioSesion(
+                navController = navController,
+                authViewModel = authViewModel,
+            )
+        }
+
+        // Pantalla de Registro de Usuario
+        composable(RutasNavegacion.Registro.route) {
+            Registro(
+                navController = navController,
+                authViewModel = authViewModel,
+            )
         }
 
         // Pantalla de Configuración y Preferencias

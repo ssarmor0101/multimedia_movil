@@ -36,4 +36,32 @@
     <string name="pokedex">Pokédex</string>
     <string name="pokemon_tipo">Tipo</string>
     <string name="cargando_pokemons">Cargando Pokédex...</string>
+
+    <!-- Autenticación y Firebase -->
+    <string name="inicio_sesion">Inicio de Sesión</string>
+    <string name="inicio_sesion_titulo">Iniciar Sesión</string>
+    <string name="inicio_sesion_subtitulo">Ingresa tus credenciales para acceder a tu cuenta</string>
+    <string name="registro">Registro de Usuario</string>
+    <string name="registro_titulo">Crear una Cuenta</string>
+    <string name="registro_subtitulo">Completa tus datos para registrarte en LinkFP</string>
+    <string name="email_label">Correo Electrónico</string>
+    <string name="email_hint">ejemplo@correo.com</string>
+    <string name="password_label">Contraseña</string>
+    <string name="confirm_password_label">Confirmar Contraseña</string>
+    <string name="iniciar_sesion_boton">Iniciar Sesión</string>
+    <string name="registrarse_boton">Registrarse</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="sesion_no_iniciada">Sesión no iniciada</string>
+    <string name="usuario_conectado">Usuario: %1$s</string>
+    <string name="ir_a_registro">¿No tienes cuenta? Regístrate aquí</string>
+    <string name="ir_a_inicio_sesion">¿Ya tienes cuenta? Inicia sesión aquí</string>
+    <string name="error_campos_vacios">Por favor, rellena todos los campos obligatorios.</string>
+    <string name="error_contrasenias_no_coinciden">Las contraseñas no coinciden.</string>
+    <string name="error_contrasenia_corta">La contraseña debe tener al menos 6 caracteres.</string>
+    <string name="error_email_invalido">El formato del correo electrónico no es válido.</string>
+    <string name="auth_exito_login">¡Sesión iniciada con éxito!</string>
+    <string name="auth_exito_registro">¡Registro realizado con éxito!</string>
+    <string name="auth_error_generico">Error en la autenticación: %1$s</string>
+    <string name="ocultar_contrasenia">Ocultar contraseña</string>
+    <string name="mostrar_contrasenia">Mostrar contraseña</string>
 </resources>
